@@ -15,6 +15,7 @@ It will flash the FTDI module EEPROM with correct configuration and serial Numbe
 ## Test Tools
 
 - Rapsberry PI (2 or 3) installed with latest [Raspbian Jessie Lite](https://www.raspberrypi.org/downloads/raspbian/)
+- 1 x 4Gb SD card to put Raspian Jessie Image
 - 2 x Dupond cable or build cable from dupond and Pogo Pins depending the best use you choose for testing
 - Test Software installed (this repo)
 - Some USB Micro Teleinfo to flash
@@ -78,7 +79,7 @@ chmod ug+x flash.sh serial_check.py
 
 Connect Raspberry PI P1 connector pin 6 (ground) and pin 8 (TXD) to Micro Teleinfo input connector (whatever wire order, no matter)
 
-![schematic](https://raw.github.com/ch2i/master/ftx_prog/pictures/micro_teleinfo_pi.jpg)
+![schematic](https://raw.githubusercontent.com/ch2i/ftx_prog/master/pictures/micro_teleinfo_pi.jpg)
 
 
 ## Usage
