@@ -19,10 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; see the file LICENSE.txt.  If not, write to
  * the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
- 
- * Modified by Charles-Henri Hallard :
- * for Micro Teleinfo programing process
- 
  */
  
 #include <stdlib.h>
@@ -35,7 +31,7 @@
 #include <ftdi.h>
 #include <stdbool.h>
 
-#define MYVERSION	"0.2"
+#define MYVERSION	"0.1"
 
 #define CBUS_COUNT	7
 
@@ -107,7 +103,7 @@ enum peripheral_config {
 	invert_dsr		= 0x20,
 	invert_dcd		= 0x40,
 	invert_ri		= 0x80,
-}; 
+};
 
 /* ------------ Command Line Arguments ------------ */
 
@@ -140,6 +136,7 @@ enum arg_type {
 	arg_new_vid,
 	arg_new_pid,
 	arg_invert,
+	arg_noinvert,
 	arg_self_powered,
 };
 
@@ -173,6 +170,7 @@ static const char* arg_type_strings[] = {
 	"--new-vid",
 	"--new-pid",
 	"--invert",
+	"--noinvert",
 	"--self-powered",
 	NULL
 };
@@ -251,6 +249,7 @@ static const char *arg_type_help[] = {
 	"			 <number>   # (new/custom vendor id to be programmed)",
 	"			 <number>   # (new/custom product id be programmed)",
 	"[invert]",
+	"[noinvert]",
 	"		 [on|off]   # (specify if chip is bus-powered or self-powered)",
 
 };
@@ -402,79 +401,77 @@ static void ee_dump (struct eeprom_fields *ee)
 	unsigned int c;
 	
 	/* Misc Config */
-	//printf("	Battery Charge Detect (BCD) Enabled = %s\n", print_bool(ee->bcd_enable));
-	//printf("	Force Power Enable Signal on CBUS = %s\n", print_bool(ee->force_power_enable));
-	//printf("	Deactivate Sleep in Battery Charge Mode = %s\n", print_bool(ee->deactivate_sleep));
+//	printf("	Battery Charge Detect (BCD) Enabled = %s\n", print_bool(ee->bcd_enable));
+//	printf("	Force Power Enable Signal on CBUS = %s\n", print_bool(ee->force_power_enable));
+//	printf("	Deactivate Sleep in Battery Charge Mode = %s\n", print_bool(ee->deactivate_sleep));
 	
-	//printf("	External Oscillator Enabled = %s\n", print_bool(ee->ext_osc));
-	//printf("	External Oscillator Feedback Resistor Enabled = %s\n", print_bool(ee->ext_osc_feedback_en));
-	//printf("	CBUS pin allocated to VBUS Sense Mode = %s\n", print_bool(ee->vbus_sense_alloc));
-	//printf("	Load Virtual COM Port (VCP) Drivers = %s\n", print_bool(ee->load_vcp));
+//	printf("	External Oscillator Enabled = %s\n", print_bool(ee->ext_osc));
+//	printf("	External Oscillator Feedback Resistor Enabled = %s\n", print_bool(ee->ext_osc_feedback_en));
+//	printf("	CBUS pin allocated to VBUS Sense Mode = %s\n", print_bool(ee->vbus_sense_alloc));
+//	printf("	Load Virtual COM Port (VCP) Drivers = %s\n", print_bool(ee->load_vcp));
 	
 	/* USB VID/PID */
-	//printf("VID    = 0x%04x\n", ee->usb_vid);
-	//printf("PID    = 0x%04x\n", ee->usb_pid);
+//	printf("	Vendor ID (VID) = 0x%04x\n", ee->usb_vid);
+//	printf("	Product ID (PID) = 0x%04x\n", ee->usb_pid);
 	
 	/* USB Release Number */
-	//printf("	USB Version = USB%d.%d\n", ee->usb_release_major, ee->usb_release_minor);	
-
-	/* Manufacturer, Product and Serial Number string */
-	//printf("	Manufacturer = %s\n", ee->manufacturer_string);
-	//printf("	Product = %s\n", ee->product_string);
-	printf("Serial = %s\n", ee->serial_string);
-
+//	printf("	USB Version = USB%d.%d\n", ee->usb_release_major, ee->usb_release_minor);	
+	
 	/* Max Power and Config */
-	//printf("	Remote Wakeup by something other than USB = %s\n", print_bool(ee->remote_wakeup));
-	//printf("	Self Powered = %s\n", print_bool(ee->self_powered));
-	//printf("	Maximum Current Supported from USB = %dmA\n", 2 * ee->max_power); /* Units of 2mA */
+//	printf("	Remote Wakeup by something other than USB = %s\n", print_bool(ee->remote_wakeup));
+//	printf("	Self Powered = %s\n", print_bool(ee->self_powered));
+//	printf("	Maximum Current Supported from USB = %dmA\n", 2 * ee->max_power); /* Units of 2mA */
 	
 	/* Device and perhiperal control */
-	//printf("	Pins Pulled Down on USB Suspend = %s\n", print_bool(ee->suspend_pull_down));
-	//printf("	Indicate USB Serial Number Available = %s\n", print_bool(ee->serial_number_avail));
+//	printf("	Pins Pulled Down on USB Suspend = %s\n", print_bool(ee->suspend_pull_down));
+//	printf("	Indicate USB Serial Number Available = %s\n", print_bool(ee->serial_number_avail));
 	
-	//printf(" FT1248\n");
-	//printf("-------\n");
-	//printf("	FT1248 Clock Polarity = %s\n", ee->ft1248_cpol ? "Active High":"Active Low");
-	//printf("	FT1248 Bit Order = %s\n", ee->ft1248_bord ? "LSB to MSB":"MSB to LSB");
-	//printf("	FT1248 Flow Control Enabled = %s\n",  print_bool(ee->ft1248_flow_control));
+//	printf(" FT1248\n");
+//	printf("-------\n");
+//	printf("	FT1248 Clock Polarity = %s\n", ee->ft1248_cpol ? "Active High":"Active Low");
+//	printf("	FT1248 Bit Order = %s\n", ee->ft1248_bord ? "LSB to MSB":"MSB to LSB");
+//	printf("	FT1248 Flow Control Enabled = %s\n",  print_bool(ee->ft1248_flow_control));
 
-	//printf(" RS232\n");
-	//printf("-------\n");
-	//printf("	Invert TXD = %s\n", print_bool(ee->invert_txd));
-	printf("InvRXD = %s\n", print_bool(ee->invert_rxd));
-	//printf("	Invert RTS = %s\n", print_bool(ee->invert_rts));
-	//printf("	Invert CTS = %s\n", print_bool(ee->invert_cts));
-	//printf("	Invert DTR = %s\n", print_bool(ee->invert_dtr));
-	//printf("	Invert DSR = %s\n", print_bool(ee->invert_dsr));
-	//printf("	Invert DCD = %s\n", print_bool(ee->invert_dcd));
-	//printf("	Invert RI = %s\n", print_bool(ee->invert_ri));
+//	printf(" RS232\n");
+//	printf("-------\n");
+//	printf("InvTX = %s\n", print_bool(ee->invert_txd));
+	printf("InvRX = %s\n", print_bool(ee->invert_rxd));
+//	printf("	Invert RTS = %s\n", print_bool(ee->invert_rts));
+//	printf("	Invert CTS = %s\n", print_bool(ee->invert_cts));
+//	printf("	Invert DTR = %s\n", print_bool(ee->invert_dtr));
+//	printf("	Invert DSR = %s\n", print_bool(ee->invert_dsr));
+//	printf("	Invert DCD = %s\n", print_bool(ee->invert_dcd));
+//	printf("	Invert RI = %s\n", print_bool(ee->invert_ri));
 	
-	//printf(" RS485\n");
-	//printf("-------\n");
-	//printf("	RS485 Echo Suppression Enabled = %s\n", print_bool(ee->rs485_echo_suppress));
+//	printf(" RS485\n");
+//	printf("-------\n");
+//	printf("	RS485 Echo Suppression Enabled = %s\n", print_bool(ee->rs485_echo_suppress));
 	
 	/* DBUS & CBUS Control */
-	//printf("	DBUS Drive Strength = %dmA\n", 4 * (ee->dbus_drive_strength+1));
-	//printf("	DBUS Slow Slew Mode = %u\n", ee->dbus_slow_slew);
-	//printf("	DBUS Schmitt Trigger = %u\n", ee->dbus_schmitt);
-	//printf("	CBUS Drive Strength = %dmA\n", 4 * (ee->cbus_drive_strength+1));
-	//printf("	CBUS Slow Slew Mode = %u\n", ee->cbus_slow_slew);
-	//printf("	CBUS Schmitt Trigger = %u\n", ee->cbus_schmitt);
+//	printf("	DBUS Drive Strength = %dmA\n", 4 * (ee->dbus_drive_strength+1));
+//	printf("	DBUS Slow Slew Mode = %u\n", ee->dbus_slow_slew);
+//	printf("	DBUS Schmitt Trigger = %u\n", ee->dbus_schmitt);
+//	printf("	CBUS Drive Strength = %dmA\n", 4 * (ee->cbus_drive_strength+1));
+//	printf("	CBUS Slow Slew Mode = %u\n", ee->cbus_slow_slew);
+//	printf("	CBUS Schmitt Trigger = %u\n", ee->cbus_schmitt);
 	
+	/* Manufacturer, Product and Serial Number string */
+//	printf("	Manufacturer = %s\n", ee->manufacturer_string);
+//	printf("	Product = %s\n", ee->product_string);
+	printf("Serial= %s\n", ee->serial_string);
 	
 	/* I2C */
-	//printf("  I2C\n");
-	//printf("-------\n");
-	//printf("	I2C Slave Address = %d \n", ee->i2c_slave_addr);
-	//printf("	I2C Device ID = %d \n", ee->i2c_device_id);
-	//printf("	I2C Schmitt Triggers Disabled = %s\n",  print_bool(ee->disable_i2c_schmitt));
+//	printf("  I2C\n");
+//	printf("-------\n");
+//	printf("	I2C Slave Address = %d \n", ee->i2c_slave_addr);
+//	printf("	I2C Device ID = %d \n", ee->i2c_device_id);
+//	printf("	I2C Schmitt Triggers Disabled = %s\n",  print_bool(ee->disable_i2c_schmitt));
 
 	/* CBUS */
 //	printf("  CBUS\n");
 //	printf("-------\n");
-//	for (c = 0; c < CBUS_COUNT; ++c) {
 	for (c = 1; c < 3; ++c) {
-		printf("CBUS%u  = %s\n", c, cbus_mode_strings[ee->cbus[c]]);
+		printf("CBUS%u = %s\n", c, cbus_mode_strings[ee->cbus[c]]);
 	}
 };
 
@@ -513,7 +510,7 @@ static unsigned short verify_crc (void *addr, int len)
 
 	if (crc != actual) {
 		fprintf(stderr, "Bad CRC: crc=0x%04x, actual=0x%04x\n", crc, actual);
-		exit(EINVAL);
+		//exit(EINVAL);
 	}
 	if (verbose) printf("CRC: Okay (0x%04x)\n", crc);
 	return crc;
@@ -698,7 +695,7 @@ static void ee_decode (unsigned char *eeprom, int len, struct eeprom_fields *ee)
 {
 	int c;
 	
-	/* Misc Config */ 
+	/* Misc Config */
 	ee->bcd_enable = (eeprom[0x00] & bcd_enable);
 	ee->force_power_enable = (eeprom[0x00] & force_power_enable);
 	ee->deactivate_sleep = (eeprom[0x00] & deactivate_sleep);
@@ -807,6 +804,8 @@ static void show_help (FILE *fp)
 				fprintf(fp, "  [1..%d]", CBUS_COUNT);
 				print_options(fp, cbus_mode_strings);
 			} else if (strcmp(val, "[invert]") == 0) {
+				print_options(fp, rs232_strings);
+			} else if (strcmp(val, "[noinvert]") == 0) {
 				print_options(fp, rs232_strings);
 			} else {
 				fprintf(fp, "  %s", val);
@@ -922,14 +921,26 @@ static void process_args (int argc, char *argv[], struct eeprom_fields *ee)
 	break;
       case arg_invert:
 	switch(match_arg(argv[i++], rs232_strings)) {
-	  case 0:	ee->invert_txd = !ee->invert_txd; break;
-	  case 1:	ee->invert_rxd = !ee->invert_rxd; break;
-	  case 2:	ee->invert_rts = !ee->invert_rts; break;
-	  case 3:	ee->invert_cts = !ee->invert_cts; break;
-	  case 4:	ee->invert_dtr = !ee->invert_dtr; break;
-	  case 5:	ee->invert_dsr = !ee->invert_dsr; break;
-	  case 6:	ee->invert_dcd = !ee->invert_dcd; break;
-	  case 7:	ee->invert_ri = !ee->invert_ri; break;
+	  case 0:	ee->invert_txd = true; break;
+	  case 1:	ee->invert_rxd = true; break;
+	  case 2:	ee->invert_rts = true; break;
+	  case 3:	ee->invert_cts = true; break;
+	  case 4:	ee->invert_dtr = true; break;
+	  case 5:	ee->invert_dsr = true; break;
+	  case 6:	ee->invert_dcd = true; break;
+	  case 7:	ee->invert_ri = true; break;
+	}
+	break;
+      case arg_noinvert:
+	switch(match_arg(argv[i++], rs232_strings)) {
+	  case 0:	ee->invert_txd = false; break;
+	  case 1:	ee->invert_rxd = false; break;
+	  case 2:	ee->invert_rts = false; break;
+	  case 3:	ee->invert_cts = false; break;
+	  case 4:	ee->invert_dtr = false; break;
+	  case 5:	ee->invert_dsr = false; break;
+	  case 6:	ee->invert_dcd = false; break;
+	  case 7:	ee->invert_ri = false; break;
 	}
 	break;
 	/* Strings */
@@ -1067,11 +1078,13 @@ int main (int argc, char *argv[])
 	if (slash)
 		myname = slash + 1;
 	
-	//printf("%s %s\n", myname, MYVERSION);
-	printf("Micro Teleinfo flasher V1.0\n");
+	printf("\n%s: version %s\n", myname, MYVERSION);
+//	printf("Modified for the FT-X series by Richard Meadows\n\n");
+//	printf("Based upon:\n");
+//	printf("ft232r_prog: version 1.23, by Mark Lord.\n");
 	if (argc < 2) {
 		show_help(stdout);
-		exit(EINVAL);
+		exit(0);
 	}
 
 	ftdi_init(&ftdi);
@@ -1083,15 +1096,15 @@ int main (int argc, char *argv[])
 	process_args(argc, argv, &ee);	/* handle --help and --old-* args */
 
 	if (ftdi_usb_open_desc(&ftdi, ee.old_vid, ee.old_pid, NULL, ee.old_serno)) {
-		fprintf(stderr, "ftdi_usb_open() failed for %04x:%04x:%s %s\n", ee.old_vid, ee.old_pid, ee.old_serno ? ee.old_serno : "", ftdi_get_error_string(&ftdi));
+		fprintf(stderr, "ftdi_usb_open() failed for %04x:%04x:%s %s\n",
+			ee.old_vid, ee.old_pid, ee.old_serno ? ee.old_serno : "", ftdi_get_error_string(&ftdi));
 		exit(ENODEV);
 	}
 	atexit(&do_close);
 	
 	/* First, read the original eeprom from the device */
 	(void) ee_read_and_verify(old, len);
-	if (verbose) 
-		dumpmem("existing eeprom", old, len);
+	if (verbose) dumpmem("existing eeprom", old, len);
 
 	/* Save old contents to a file, if requested (--save) */
 	if (save_path)
@@ -1100,18 +1113,19 @@ int main (int argc, char *argv[])
 	/* Restore contents from a file, if requested (--restore) */
 	if (restore_path) {
 		restore_eeprom_from_file(restore_path, new, len, sizeof(new));
-		/* Decode restored eeprom contents into ee struct */
+		if (verbose) dumpmem(restore_path, new, len);
+		/* Decode file eeprom contents into ee struct */
 		ee_decode(new, len, &ee);
-		
-		if (verbose) 
-			dumpmem(restore_path, new, len);
+		printf("Rewriting eeprom with new contents.\n");
+    update_crc(new,len);
+		ee_write(new, len);
 	} else {
 		/* Decode current eeprom contents into ee struct */
 		ee_decode(old, len, &ee);
-	
-	}
+  }
 	
 	/* TODO: It'd be nice to check we can restore the EEPROM.. */
+	
 	
 	/* process args, and dump new settings */
 	process_args(argc, argv, &ee);	/* Handle value-change args */
@@ -1124,8 +1138,7 @@ int main (int argc, char *argv[])
 	if (0 == memcmp(old, new, len)) {
 		printf("No change from existing eeprom contents.\n");
 	} else {
-		if (verbose) 
-			dumpmem("new eeprom", new, len);
+		if (verbose) dumpmem("new eeprom to write", new, len);
 		
 		printf("Rewriting eeprom with new contents.\n");
 		ee_write(new, len);
@@ -1138,7 +1151,6 @@ int main (int argc, char *argv[])
 		ftdi_usb_reset(&ftdi);  /* Reset the device to force it to load the new settings */
 	}
 	
-	// All went fine
 	exit(0);
 	return 0;  /* never reached */
 }
