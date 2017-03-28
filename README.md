@@ -66,9 +66,25 @@ Install some prerequisites tools
 sudo apt-get install build-essential gcc make libftdi-dev git-core python-serial
 ```
 
+
+Install and build lastest usb_modeswitch
+
+```
+cd
+sudo apt-get install libusb-1.0-0-dev
+wget http://www.draisberghof.de/usb_modeswitch/usb-modeswitch-2.5.0.tar.bz2
+bzip2 -d usb-modeswitch-2.5.0.tar.bz2
+tar -xvf usb-modeswitch-2.5.0.tar
+cd usb-modeswitch-2.5.0/
+make
+sudo make install
+```
+
+
 Then install and build the test tools
 
 ```
+cd
 git clone https://github.com/ch2i/ftx_prog
 cd ftx_prog
 make
