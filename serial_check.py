@@ -31,7 +31,7 @@ try:
     # Try to read Data back
     s=ser_recv.readline()
     # Data correct ?
-    if s.find("Teleinfo") != -1:
+    if s.find("Teleinfo") != -1 or s.find("MOTDETAT ") != -1:
       print "Transmission OK"
       ser_recv.close()
       ser_send.close()
